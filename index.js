@@ -17,7 +17,7 @@ function YuiModule (path, options) {
 
 YuiModule.prototype.runShifter = function(cb) {
   // TODO : re-enable lint and find a way to stop css linting only
-  spawn('shifter', ['--no-lint', '--no-exec', '--quiet'], {stdio: 'inherit', cwd: this.path}).on('close', function () {
+  spawn('shifter', ['--no-lint', '--no-exec'/*, '--quiet' */], {stdio: 'inherit', cwd: this.path}).on('close', function () {
     cb();
   });
 };
@@ -99,6 +99,7 @@ YuiModule.prototype.compileSassFile = function(sassPath, cb){
     'exec', 'sass',
     '--compass',
     '-t', 'expanded',
+    '--sourcemap=none',
     this.path + '/' + sassPath, // input
     '-I', this.options.sassSharedPath,
     this.path + '/' + dest // output
@@ -171,7 +172,7 @@ YuiModule.prototype.cleanTemplates = function(cb) {
 YuiModule.prototype.cleanSass = function(cb) {
   var module = this;
 
-  glob('assets/*.scss', {cwd: this.path}, function (er, files) {
+  glob('**/*.scss', {cwd: this.path}, function (er, files) {
     var tasks = [];
 
     files.forEach(function (file) {
